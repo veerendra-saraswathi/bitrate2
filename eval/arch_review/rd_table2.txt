@@ -1,0 +1,21 @@
+
+KAIST thermal 8-bit  (PSNR peak 255)
+point | D JPEG-LS | ewc near-lossless | ewc wavelet, same bytes | ewc two-layer, same max err
+NEAR=1 | 22794 B 50.32 dB e1 | 23859 B 50.27 dB e1 | 22790 B 56.04 dB e2 | 17879 B 53.24 dB e1
+NEAR=2 | 14608 B 46.10 dB e2 | 15406 B 46.31 dB e2 | 14602 B 53.98 dB e3 | 8430 B 50.57 dB e2
+NEAR=4 | 8656 B 40.99 dB e4 | 9058 B 41.19 dB e4 | 8654 B 51.99 dB e4 | 4248 B 49.04 dB e4
+2 Mbps | 6887 B 39.76 dB e5 (NEAR=5) | - | 8331 B 51.88 dB e4 | -
+
+KAIST visible 8-bit  (PSNR peak 255)
+point | D JPEG-LS | ewc near-lossless | ewc wavelet, same bytes | ewc two-layer, same max err
+NEAR=1 | 80275 B 49.90 dB e1 | 81673 B 49.91 dB e1 | 80272 B 50.32 dB e3 | 81681 B 49.91 dB e1
+NEAR=2 | 65116 B 45.20 dB e2 | 66326 B 45.18 dB e2 | 65110 B 48.06 dB e8 | 66334 B 45.18 dB e2
+NEAR=4 | 52418 B 40.17 dB e4 | 53212 B 40.17 dB e4 | 52416 B 46.21 dB e8 | 45046 B 42.70 dB e4
+2 Mbps | 7857 B 25.20 dB e31 (NEAR=31) | - | 8332 B 35.59 dB e26 | -
+
+FLIR ePoikf 14-bit  (PSNR peak scene range)
+point | D JPEG-LS | ewc near-lossless | ewc wavelet, same bytes | ewc two-layer, same max err
+NEAR=1 | 115438 B 53.83 dB e1 | 117529 B 53.83 dB e1 | 115437 B 53.09 dB e4 | 117537 B 53.83 dB e1
+NEAR=4 | 60273 B 43.92 dB e4 | 61335 B 43.91 dB e4 | 60270 B 46.08 dB e10 | 61343 B 43.91 dB e4
+NEAR=16 | 11495 B 34.80 dB e16 | 12506 B 34.68 dB e16 | 11490 B 41.24 dB e16 | 6322 B 39.05 dB e16
+2 Mbps | 7859 B 32.39 dB e22 (NEAR=22) | - | 8332 B 40.87 dB e19 | -
