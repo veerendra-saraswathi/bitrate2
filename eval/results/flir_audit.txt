@@ -1,0 +1,15 @@
+FLIR ADAS v2 audit (run on the user's machine over every TIFF in video_thermal_test/analyticsData,
+and 300 random TIFFs from each of images_thermal_train / images_thermal_val; script: device-side audit.py)
+label | frames | dtype/mode | min | max | mean | mean within-frame std | bits needed | frame-number gaps
+video-4FRnNpmSmwktFJKjg | 338 | uint16 I;16 | 6686 | 7343 | 7027.0 | 111.0 | 13 | 0
+video-5RSrbWYu9eokv5bvR | 411 | uint16 I;16 | 7081 | 7350 | 7211.9 | 60.8 | 13 | 0
+video-6tLtjdkv5K5BuhB37 | 226 | uint16 I;16 | 7205 | 7831 | 7397.4 | 122.5 | 13 | 0
+video-SCiKdG3MqZfiE292B | 428 | uint16 I;16 | 6761 | 8958 | 6907.1 | 52.9 | 14 | 1
+video-ZAtDSNuZZjkZFvMAo | 1033 | uint8 L (8-bit, excluded) | 0 | 255 | 139.8 | 47.6 | 8 | 2
+video-ePoikf5LyTTfqchga | 540 | uint16 I;16 | 7118 | 11514 | 7373.1 | 121.6 | 14 | 0
+video-t3f7QC8hZr6zYXpEZ | 565 | uint8 L (8-bit, excluded) | 0 | 255 | 125.6 | 55.7 | 8 | 0
+video-vbrSzr4vFTm5QwuGH | 208 | uint16 I;16 | 6746 | 7432 | 7037.1 | 100.5 | 13 | 0
+images_thermal_train (300 of 10742) | 300 | uint16 I;16 | 5413 | 11538 | 7288.7 | 232.8 | 14 | -
+images_thermal_val (300 of 1144) | 300 | uint16 I;16 | 5566 | 11947 | 7293.6 | 259.4 | 14 | -
+All files 640x512, little-endian LZW TIFF, BlackIsZero. Low bit used in all. data/ folders hold 8-bit JPEG previews (not used).
+Noise check (first 60 frames): 4FRnNp mean |frame diff| 3.9 DN, spatial noise ~4.2 DN; 5RSrbW 4.1 DN, ~3.6 DN.
