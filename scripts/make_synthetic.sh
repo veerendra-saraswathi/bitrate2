@@ -39,3 +39,20 @@ for i in range(5):
 
 print("synthetic set ready")
 PY
+# --- additional bit depths (IR + Visible) ---
+python3 - << 'PY'
+import numpy as np, os
+def write(path, arr):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    arr.tofile(path)
+    print(f"wrote {path}  shape={arr.shape}")
+
+for bd, peak in [(8,255),(10,1023),(12,4095),(14,16383),(16,65535)]:
+    # IR / thermal-like
+    arr = np.clip(np.random.normal(peak*0.35, peak*0.08, (512,640)), 0, peak).astype(np.uint16)
+    write(f"data/synthetic/ir/ir_640x512_{bd}.u16", arr)
+    # Visible-like
+    arrv = np.clip(np.random.normal(peak*0.5, peak*0.12, (512,640)), 0, peak).astype(np.uint16)
+    write(f"data/synthetic/vis/vis_640x512_{bd}.u16", arrv)
+print("bit-depth set ready")
+PY
