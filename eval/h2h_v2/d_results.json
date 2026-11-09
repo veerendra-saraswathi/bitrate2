@@ -1,0 +1,165 @@
+{
+ "8_thermal_near0": {
+  "bytes": 41067,
+  "mbps": 9.85608
+ },
+ "8_thermal_near1": {
+  "bytes": 22794,
+  "mbps": 5.47056
+ },
+ "8_thermal_2mbps": {
+  "near": 5,
+  "bytes": 6887,
+  "psnr": 39.76149591639775,
+  "ssim": 0.9040986126142164,
+  "mae": 2.1127838134765624,
+  "maxerr": 5,
+  "enc_ms": 0.5467080000016722,
+  "dec_ms": 0.2876050000004682
+ },
+ "8_visible_near0": {
+  "bytes": 134009,
+  "mbps": 32.16216
+ },
+ "8_visible_near1": {
+  "bytes": 80275,
+  "mbps": 19.266
+ },
+ "8_visible_2mbps": {
+  "near": 31,
+  "bytes": 7857,
+  "psnr": 25.19768307729437,
+  "ssim": 0.45203120540065067,
+  "mae": 11.514773559570312,
+  "maxerr": 31,
+  "enc_ms": 0.6667560000011008,
+  "dec_ms": 0.3710910000016554
+ },
+ "14_flirv_4FRnNp": {
+  "psnr14": 66.10011091478307,
+  "psnr_dr": 34.82094265541734,
+  "rmse": 8.119819982696054,
+  "ssim_agc": 0.7879877128863286,
+  "maxerr": 19,
+  "psnr14_min": 65.6921350366463,
+  "mae": 6.671170349121094,
+  "near_avg": 18.4,
+  "bytes_avg": 8012.5,
+  "bytes_max": 8319,
+  "enc_ms": 0.845320500001634,
+  "dec_ms": 0.6915684999988514,
+  "lossless_bytes_f0": 188624,
+  "lossless_exact": true
+ },
+ "14_flirv_5RSrbW": {
+  "psnr14": 69.30888826959674,
+  "psnr_dr": 30.512342330438777,
+  "rmse": 5.609879688414104,
+  "ssim_agc": 0.6279962342357595,
+  "maxerr": 13,
+  "psnr14_min": 69.24261620039532,
+  "mae": 4.543686218261719,
+  "near_avg": 13.0,
+  "bytes_avg": 7908.3,
+  "bytes_max": 8229,
+  "enc_ms": 0.805978999999013,
+  "dec_ms": 0.6522535000001994,
+  "lossless_bytes_f0": 176686,
+  "lossless_exact": true
+ },
+ "14_flirv_6tLtjd": {
+  "psnr14": 66.31372613191652,
+  "psnr_dr": 35.32432704129659,
+  "rmse": 7.91996192031918,
+  "ssim_agc": 0.782981224582804,
+  "maxerr": 18,
+  "psnr14_min": 66.17638165463103,
+  "mae": 6.54307373046875,
+  "near_avg": 18.0,
+  "bytes_avg": 8028.9,
+  "bytes_max": 8143,
+  "enc_ms": 0.7612955000020349,
+  "dec_ms": 0.6258015000000228,
+  "lossless_bytes_f0": 177668,
+  "lossless_exact": true
+ },
+ "14_flirv_SCiKdG": {
+  "psnr14": 58.67863741530996,
+  "psnr_dr": 35.41680822542055,
+  "rmse": 19.09891747884218,
+  "ssim_agc": 0.7107877057425263,
+  "maxerr": 42,
+  "psnr14_min": 58.17533998244475,
+  "mae": 16.051737365722655,
+  "near_avg": 40.0,
+  "bytes_avg": 8247.8,
+  "bytes_max": 8305,
+  "enc_ms": 0.6917565000001957,
+  "dec_ms": 0.572290000000919,
+  "lossless_bytes_f0": 193005,
+  "lossless_exact": true
+ },
+ "14_flirv_ePoikf": {
+  "psnr14": 64.3455307958724,
+  "psnr_dr": 32.13124895555328,
+  "rmse": 9.938902191793243,
+  "ssim_agc": 0.6917991851997856,
+  "maxerr": 23,
+  "psnr14_min": 63.90744556871682,
+  "mae": 8.24956024169922,
+  "near_avg": 22.2,
+  "bytes_avg": 8071.2,
+  "bytes_max": 8301,
+  "enc_ms": 0.8872589999988634,
+  "dec_ms": 0.7124409999974546,
+  "lossless_bytes_f0": 178232,
+  "lossless_exact": true
+ },
+ "14_flirv_vbrSzr": {
+  "psnr14": 66.3022716292725,
+  "psnr_dr": 35.05549454230018,
+  "rmse": 7.93026621924602,
+  "ssim_agc": 0.75361657875521,
+  "maxerr": 18,
+  "psnr14_min": 66.25104931211872,
+  "mae": 6.521893920898438,
+  "near_avg": 18.0,
+  "bytes_avg": 7837.1,
+  "bytes_max": 8025,
+  "enc_ms": 0.8054704999977957,
+  "dec_ms": 0.561134000001573,
+  "lossless_bytes_f0": 187380,
+  "lossless_exact": true
+ },
+ "14_flirstill_val": {
+  "psnr14": 54.338597240730735,
+  "psnr_dr": 30.375249207389327,
+  "rmse": 38.18052955070738,
+  "ssim_agc": 0.7124464771692259,
+  "maxerr": 140,
+  "psnr14_min": 46.76275951946144,
+  "mae": 32.38139129638672,
+  "near_avg": 78.2,
+  "bytes_avg": 8104.1,
+  "bytes_max": 8311,
+  "enc_ms": 0.8889960000004749,
+  "dec_ms": 0.7395290000005161,
+  "lossless_bytes_f0": 196573,
+  "lossless_exact": true
+ },
+ "robust_1": {
+  "rejected": 199,
+  "silent": 0,
+  "same": 1
+ },
+ "robust_4": {
+  "rejected": 200,
+  "silent": 0,
+  "same": 0
+ },
+ "robust_16": {
+  "rejected": 200,
+  "silent": 0,
+  "same": 0
+ }
+}

@@ -1,0 +1,12 @@
+SUMMARY frames 150 received 140 exact 140 wrong 0 reliable 140 lost 10 lat_med_ms 0.544 lat_p99_ms 33.823 lat_max_ms 34.339 cpu_pct_of_one_core 1.74 fec 25 drop 0.050 jitter_ms 0
+SUMMARY frames 150 received 137 exact 137 wrong 0 reliable 137 lost 13 lat_med_ms 0.546 lat_p99_ms 33.910 lat_max_ms 34.003 cpu_pct_of_one_core 1.73 fec 25 drop 0.050 jitter_ms 0
+SUMMARY frames 150 received 146 exact 146 wrong 0 reliable 146 lost 4 lat_med_ms 20.564 lat_p99_ms 53.912 lat_max_ms 53.952 cpu_pct_of_one_core 1.83 fec 25 drop 0.050 jitter_ms 20
+SUMMARY frames 150 received 146 exact 146 wrong 0 reliable 146 lost 4 lat_med_ms 20.552 lat_p99_ms 53.925 lat_max_ms 53.950 cpu_pct_of_one_core 1.87 fec 25 drop 0.050 jitter_ms 20
+SUMMARY frames 150 received 146 exact 146 wrong 0 reliable 146 lost 4 lat_med_ms 50.656 lat_p99_ms 84.031 lat_max_ms 84.109 cpu_pct_of_one_core 1.79 fec 25 drop 0.050 jitter_ms 50
+SUMMARY frames 150 received 146 exact 146 wrong 0 reliable 146 lost 4 lat_med_ms 50.669 lat_p99_ms 84.001 lat_max_ms 84.068 cpu_pct_of_one_core 1.84 fec 25 drop 0.050 jitter_ms 50
+SUMMARY frames 150 received 138 exact 138 wrong 0 reliable 138 lost 12 lat_med_ms 0.627 lat_p99_ms 33.923 lat_max_ms 33.958 cpu_pct_of_one_core 1.97 fec 50 drop 0.050 jitter_ms 0
+SUMMARY frames 150 received 140 exact 140 wrong 0 reliable 140 lost 10 lat_med_ms 0.654 lat_p99_ms 33.939 lat_max_ms 34.041 cpu_pct_of_one_core 2.02 fec 50 drop 0.050 jitter_ms 0
+SUMMARY frames 150 received 149 exact 149 wrong 0 reliable 149 lost 1 lat_med_ms 20.607 lat_p99_ms 53.984 lat_max_ms 53.994 cpu_pct_of_one_core 2.04 fec 50 drop 0.050 jitter_ms 20
+SUMMARY frames 150 received 149 exact 149 wrong 0 reliable 149 lost 1 lat_med_ms 20.662 lat_p99_ms 54.018 lat_max_ms 54.026 cpu_pct_of_one_core 2.16 fec 50 drop 0.050 jitter_ms 20
+SUMMARY frames 150 received 149 exact 149 wrong 0 reliable 149 lost 1 lat_med_ms 50.622 lat_p99_ms 83.858 lat_max_ms 84.023 cpu_pct_of_one_core 1.94 fec 50 drop 0.050 jitter_ms 50
+SUMMARY frames 150 received 149 exact 149 wrong 0 reliable 149 lost 1 lat_med_ms 51.068 lat_p99_ms 84.414 lat_max_ms 84.481 cpu_pct_of_one_core 1.89 fec 50 drop 0.050 jitter_ms 50

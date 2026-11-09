@@ -1,0 +1,50 @@
+cmake_minimum_required(VERSION 3.16)
+project(ewc LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)   # the original repo built unoptimised by default
+endif()
+if(MSVC)
+  add_compile_options(/W3 /O2)
+else()
+  add_compile_options(-Wall -Wextra -Wno-unused-parameter)
+endif()
+find_package(Threads REQUIRED)
+
+add_library(ewc STATIC src/codec.cpp src/dwt.cpp src/spiht.cpp src/motion.cpp src/loco.cpp src/net.cpp)
+target_include_directories(ewc PUBLIC include PRIVATE src)
+target_link_libraries(ewc PUBLIC Threads::Threads)
+
+add_executable(ewc_bench tools/ewc_bench.cpp)
+add_executable(ewc_layered tools/ewc_layered.cpp)
+target_link_libraries(ewc_bench PRIVATE ewc)
+target_link_libraries(ewc_layered PRIVATE ewc)
+
+add_executable(ewc_enc tools/ewc_enc.cpp)
+target_link_libraries(ewc_enc PRIVATE ewc)
+add_executable(ewc_dec tools/ewc_dec.cpp)
+target_link_libraries(ewc_dec PRIVATE ewc)
+add_executable(ewc_corrupt tools/ewc_corrupt.cpp)
+
+enable_testing()
+add_executable(test_ewc tests/test_ewc.cpp)
+target_link_libraries(test_ewc PRIVATE ewc)
+add_test(NAME test_ewc COMMAND test_ewc)
+add_executable(test_net tests/test_net.cpp)
+target_link_libraries(test_net PRIVATE ewc)
+add_test(NAME test_net COMMAND test_net)
+add_test(NAME poc_lossless COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/tests/poc_lossless.sh ${CMAKE_CURRENT_BINARY_DIR})
+
+# Optional experiment: ewc units over a GStreamer RTP/UDP pipeline (GStreamer is an external
+# library, so this tool is not part of the self-contained codec; built only when found).
+find_package(PkgConfig QUIET)
+if(PKG_CONFIG_FOUND)
+  pkg_check_modules(GST QUIET gstreamer-1.0 gstreamer-app-1.0)
+  if(GST_FOUND)
+    add_executable(ewc_gst_loop tools/gst/ewc_gst_loop.cpp)
+    target_include_directories(ewc_gst_loop PRIVATE ${GST_INCLUDE_DIRS})
+    target_link_libraries(ewc_gst_loop PRIVATE ewc ${GST_LIBRARIES})
+  endif()
+endif()

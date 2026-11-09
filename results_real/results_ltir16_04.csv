@@ -1,0 +1,5 @@
+arch,bytes,mbps,budget_pass,psnr,rmse,max_err,bit_exact,enc_med_ms,enc_p95_ms,enc_max_ms,deadline_miss,note
+wavelet,    8328,2.00,1,65.667,34.129,400,0,7.98,7.98,7.98,0,
+dplus_ll,  261455,62.75,0,199.000,0.000,0,1,38.70,38.70,38.70,0,
+dplus_n4,  139213,33.41,0,88.080,2.585,4,0,37.97,37.97,37.97,0,
+layered,73481,17.64,0,76.818,9.453,16,0,60.61,60.61,60.61,0,k=16 fits=0 trials=2

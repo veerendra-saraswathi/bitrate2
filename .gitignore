@@ -1,0 +1,11 @@
+build/
+*.o
+*.a
+*.csv
+poc_out/
+results_*/
+ewc_day1/
+test_*.u16
+*.pgm
+*.png
+*.log

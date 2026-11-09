@@ -1,0 +1,72 @@
+{
+ "A \u2014 bitrate-main 5/3 wavelet": {
+  "quality": 0,
+  "lossless": 1.1,
+  "latency": 0,
+  "robust": 0,
+  "comply": 5,
+  "maxerr": 0,
+  "platform": 6,
+  "total": 12.1
+ },
+ "D \u2014 JPEG-LS (CharLS)": {
+  "quality": 7.5,
+  "lossless": 14.0,
+  "latency": 10,
+  "robust": 5,
+  "comply": 5,
+  "maxerr": 10,
+  "platform": 5,
+  "total": 56.5
+ },
+ "ewc near-lossless (Golomb)": {
+  "quality": 4.7,
+  "lossless": 13.2,
+  "latency": 10,
+  "robust": 15,
+  "comply": 10,
+  "maxerr": 10,
+  "platform": 2,
+  "total": 64.9
+ },
+ "D+ (ewc)": {
+  "quality": 9.7,
+  "lossless": 15,
+  "latency": 7,
+  "robust": 15,
+  "comply": 10,
+  "maxerr": 10,
+  "platform": 2,
+  "total": 68.7
+ },
+ "ewc wavelet, tiled (PoC)": {
+  "quality": 25.0,
+  "lossless": 0,
+  "latency": 10,
+  "robust": 15,
+  "comply": 15,
+  "maxerr": 0,
+  "platform": 2,
+  "total": 67.0
+ },
+ "Two-layer (wavelet + D+)": {
+  "quality": 18.6,
+  "lossless": 15,
+  "latency": 7,
+  "robust": 15,
+  "comply": 15,
+  "maxerr": 10,
+  "platform": 2,
+  "total": 82.6
+ },
+ "Final ewc codec (all three paths)": {
+  "quality": 25.0,
+  "lossless": 15,
+  "latency": 10,
+  "robust": 15,
+  "comply": 15,
+  "maxerr": 10,
+  "platform": 2,
+  "total": 92.0
+ }
+}
