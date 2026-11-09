@@ -53,9 +53,8 @@ int main(int argc, char** argv) {
     std::vector<uint16_t> x(n), res(n), out(n);
     for (int f = 0; f < N && in.read(reinterpret_cast<char*>(x.data()), std::streamsize(n * 2)); ++f) {
         const auto t0 = clk::now();
-        // candidates: no base layer (pure near-lossless) + three splits around the last best
-        std::vector<double> fracs = {0.0, frac - 0.12, frac, frac + 0.12};
-        if (frac <= 0.0) fracs = {0.0, 0.3, 0.5};
+        // tighter search: pure D+ + one split, early exit on first feasible
+        std::vector<double> fracs = {0.0, std::min(0.95, std::max(0.1, frac))};
         Trial best; bool have = false; int trials = 0;
         for (double fr : fracs) {
             Trial t;
@@ -63,7 +62,13 @@ int main(int argc, char** argv) {
                 t.base_bytes = 0; t.rec.assign(n, 0);
                 renc_for(bd).encode(x.data(), uint64_t(f) * 33333, t.enh, {uint8_t('R'), uint8_t(k), 0, 0, 0, 0});
                 ++trials;
-                if (!have || t.enh.size() < best.base.size() + best.enh.size()) { best = std::move(t); have = true; }
+                int maxerr = 0;
+                for (size_t i = 0; i < n; ++i)
+                    maxerr = std::max(maxerr, std::abs(int(x[i]) - int(t.rec[i])));
+                bool fits = t.enh.size() <= budget;
+                bool ok = fits && maxerr <= k;
+                if (!have || ok) { best = std::move(t); have = true; }
+                if (ok) break;
                 continue;
             }
             fr = std::min(0.95, std::max(0.1, fr));
@@ -87,7 +92,14 @@ int main(int argc, char** argv) {
             renc_for(rbd).encode(res.data(), uint64_t(f) * 33333, t.enh,
                                  {uint8_t('R'), uint8_t(k), uint8_t(ul), uint8_t(ul >> 8), uint8_t(ul >> 16), uint8_t(ul >> 24)});
             ++trials;
-            if (!have || t.base.size() + t.enh.size() < best.base.size() + best.enh.size()) { best = std::move(t); have = true; }
+            int maxerr = 0;
+            for (size_t i = 0; i < n; ++i)
+                maxerr = std::max(maxerr, std::abs(int(x[i]) - int(t.rec[i])));
+            size_t tot = t.base.size() + t.enh.size();
+            bool fits = tot <= budget;
+            bool ok = fits && maxerr <= k;
+            if (!have || ok) { best = std::move(t); have = true; }
+            if (ok) break;   // early exit
         }
         frac = double(best.base_bytes) / budget;
         const auto t1 = clk::now();
