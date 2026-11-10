@@ -1,11 +1,32 @@
-build/
+# Local editor / Python products
+.DS_Store
+__pycache__/
+*.py[cod]
+*.bak
+
+# Build artifacts
+/build*/
 *.o
 *.a
-*.csv
-poc_out/
-results_*/
-ewc_day1/
-test_*.u16
-*.pgm
-*.png
-*.log
+
+# Transient runs; curate accepted evidence under docs/results/ or eval/
+/poc_out/
+/score_out/
+/ewc_day1/
+/results_*/
+/results_corpus/
+/results_real/
+/jetson_results/
+/jetson_test_*/
+/test_*.u16
+/*.zip
+
+# Large source/reconstruction media: keep external; existing tracked fixtures remain
+*.u16
+*.raw
+*.yuv
+*.ewc
+/data/**/*.u16.part*
+
+# Unlike the previous ignore file, curated CSV/PNG/PGM/log files are not
+# globally ignored. Add local output directories above instead.

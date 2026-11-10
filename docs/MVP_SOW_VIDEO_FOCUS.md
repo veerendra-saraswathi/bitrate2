@@ -1,3 +1,5 @@
+> Historical planning snapshot. Current evidence and acceptance states are in [mvp/STATUS.md](mvp/STATUS.md) and [mvp/ACCEPTANCE.md](mvp/ACCEPTANCE.md); retain this document for planning provenance.
+
 # Revised MVP Expectations — Video Focus
 ## Strictly Aligned to Full RCI SoW (Problem 4)
 

@@ -1,124 +1,81 @@
-# ewc — embedded wavelet codec for high-bit-depth thermal and visible imagery
+# Bitrate2 — image and video compression experiments
 
-Pure C++17. No external libraries. Monochrome 1–16-bit samples in `uint16` containers.
+C++17 encoder/decoder experiments for visible and infrared imagery. The current ewc candidate combines embedded wavelet coding with separate exact and near-lossless modes. This repository records algorithms, reproducible experiments, measured operating limits and work remaining against the full Scope of Work.
 
-ewc is application-neutral: the same encoder, decoder and transport serve storage,
-live streaming over UDP, and archival (lossless) use. The main lossy operating point
-studied so far is 2 Mbps for 640×512 14-bit video at 30 fps.
+**Status: 11 November 2026 (IST).** Working Jetson offline-video candidate; full MVP acceptance remains open. **2 Mbps is the primary questionnaire point; 4/8 Mbps are supplementary tests.**
 
-## RCI proof-of-concept (start here)
+## Read the project
 
-The Scope of Work PoC asks for 640×512 14-bit infrared at a fixed 2 Mbps, frame-level coding,
-encoder latency ≤ 2 frames, raw 14-bit decoder output, and robustness to losses in the stored
-bitstream. The `--poc` preset does exactly that; `docs/POC_REPORT.md` has the measured results.
+| Read | What you will find |
+|---|---|
+| [Experiments and results](docs/EXPERIMENTS.md) | Completed image/video experiments, settings, results, failures and source artifacts |
+| [Algorithms and architecture](docs/ARCHITECTURES_EXPLAINED.md) | A–F experiment history and explanations; [current E implementation](docs/ARCHITECTURE.md) |
+| [Full MVP acceptance](docs/mvp/ACCEPTANCE.md) | SoW traceability, acceptance gates and unresolved decisions |
+| [Plan to close the gaps](docs/mvp/PLAN.md) | Priorities, dates, dependencies and exit evidence |
+| [Documentation index](docs/README.md) | Specifications, APIs, data, evaluation and historical reports |
+| [Repository and branch guide](docs/REPOSITORY_LAYOUT.md) | Folder roles, data policy and the Mac `ombitrate` reconciliation |
 
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j
-./run_poc.sh input_640x512_14bit.u16 30 build poc_out   # encode, decode, inject losses, latency
-```
+## What is done and what remains
 
-Headline (FLIR ADAS v2, 1,000 frames): 1,999.7 kbps with no frame over budget; 34.9–42.1 dB PSNR
-over scene range, RMSE 3.8–7.6 DN; encoder worst case 23 ms = 0.69 frame at 30 fps; 94% of frames
-fully intact with 1% of packets lost from the stored stream; the decoder never loses synchronisation.
+This is the project status table. Bounded observations are not full-scope acceptance. Use the linked evidence for configuration and timing limits.
 
-## Test data
-
-KAIST 8-bit frames are in `data/kaist/`. FLIR ADAS v2 14-bit clips: see `data/README.md`
-(set `EWC_DATA` to their folder and `EWC_BIN` to the build folder before running `eval/` scripts).
-
-## Profiles
-
-Why these three paths, with the measurements: `docs/ARCHITECTURE.md`. Plain-language guide to every architecture and the full score tables: `docs/ARCHITECTURES_EXPLAINED.md`.
-
-
-| Profile | How to select | What you get |
+| Area | Achieved / measured | Remaining for full acceptance |
 |---|---|---|
-| Lossy wavelet, intra | default (`gop = 1`) | CDF 9/7 wavelet + embedded SPIHT/arithmetic coding, exact per-frame byte budget |
-| Lossy wavelet, I/P | `gop > 1` | adds motion-compensated P frames (OBMC), closed loop |
-| Lossless (D+) | `lossless = true` | JPEG-LS modelling (LOCO-I) + adaptive range coder, bit-exact; 1.0-1.9% smaller than CharLS on 14-bit FLIR |
-| Near-lossless (D+) | `lossless = true, near = N` | every sample within ±N; 1.3-17% smaller than CharLS (median -9%) |
-| Bounded error at fixed rate | `tools/ewc_layered` (experimental) | wavelet base + D+ residual; guaranteed max error at 2 Mbps on video |
-| Embedded lossless | `lossless = true, embedded_lossless = true` | reversible 5/3 wavelet; any prefix decodes lossy; 4–5× slower |
+| Images | VIS/IR frame experiments across A–F; exact/NEAR references and stored-corruption tests | Current common-corpus replay, actual acceptance samples and full format coverage |
+| FLIR thermal video | Six 640×512 14-bit clips, 900 frames at 2/4/8 Mbps; no measured two-frame encode misses | Representative high-resolution IR, quality review and agreed final operating envelope |
+| High-resolution visible luma | Beauty 1920×1080, 50 frames at 2 Mbps; 35.61 dB, worst encode 62.49 ms | Colour, longer sequences, target-resolution coverage and current 4/8 Mbps replay |
+| Additional thermal and Bayer | Bracken 151, Marathon 1000 and CRVD 7 frames; rate/deadline passed at 2 Mbps | Effective thermal precision audit; CRVD quality is unresolved (19.40 dB sample-plane PSNR) |
+| Primary 2 Mbps envelope | **2,108 source frames; all ≤8,333 bytes/frame and 0 measured encoder misses >66.67 ms** | Agreed frame rate and complete latency boundary; sustained live queue/throughput validation |
+| D+ exact / NEAR=4 | Exact max error 0; NEAR max error 4 on 1,158 frames | Tested rates far above 2 Mbps; many latency failures; agree exact-mode acceptance conditions |
+| Required formats | Mono/luma/Bayer sample paths and several bit-depth profiles exercised | All 8/10/12/14/16-bit mono/colour paths and original-format reconstruction |
+| Metadata and files | Files encode/decode; 128 metadata bytes serialized in latest runs | Final schema and field-by-field decode round trip |
+| Transport and bandwidth | Packetizer/reassembler, simulation and fixed-rate sweeps exist | Actual Ethernet/UDP endpoints, agreed framework scope and bandwidth-change/buffer evidence |
+| Platform and delivery | C++ Release build/run on Jetson Orin Nano Super; source and build scripts available | Independent designated PC decoding, dependency/offline/resource audits and complete release handover |
 
-All profiles protect headers with CRC-32 / CRC-16 and payloads with a CRC-16 per 256 bytes,
-so damaged regions are found and concealed instead of decoded as data.
+All current video timings are offline measurements at a **30 fps evaluation reference**. Metadata allowance is included in recorded budgets; UDP/IP/FEC overhead is separate. PSNR peaks differ by dataset and cannot be pooled. D+ exactness is not a claim of lossless 2 Mbps on arbitrary inputs. No overall completion percentage replaces the acceptance gates.
 
-## Build
+## Current algorithm profiles
+
+| Profile | Algorithm / selection | Status |
+|---|---|---|
+| E tiled wavelet, intra | CDF 9/7 + embedded SPIHT/range coding; `--tile 128 --tile-levels 4 --gop 1` | Primary measured video candidate |
+| E temporal wavelet | Motion-compensated P frames; `--gop` greater than 1 | Existing experimental path; current headline runs use intra |
+| D+ exact / near-lossless | LOCO-I-style prediction/context modelling + custom adaptive range coder; `--lossless [--near N]` | Reconstruction demonstrated; rate/latency limits recorded |
+| Two-layer | Wavelet base + predictive residual; `ewc_layered` | Experimental; simultaneous rate/error/latency guarantee not established |
+| Embedded lossless | Reversible 5/3 + embedded coding | Experimental; separate from the main lossy 9/7 path |
+
+These are custom implementations, not claims of JPEG-LS/JPEG2000/JPEG XS standards conformance. External CharLS in the older `bitrate` project is a separate reference.
+
+## Build and run
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
+cmake --build build -j2
+ctest --test-dir build --output-on-failure
 ```
 
-Sanitizer build:
+Input to the CLI is headerless little-endian uint16 sample planes, row-major. Set the actual bit depth, width and height explicitly. Inspect values first: lossy CLI range handling can clip out-of-range samples; do not silently relabel data.
+
+For the historical 640×512 / 14-bit PoC profile:
 
 ```bash
-cmake -S . -B build_asan -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=address,undefined -fno-sanitize-recover=undefined"
-cmake --build build_asan -j
+./run_poc.sh input_640x512_14bit.u16 30 build poc_out
 ```
 
-## Tests
+For the recent verified dataset runner, see [the data kit](scripts/JETSON_DATA_KIT.md). It records per-frame metrics and environment information. Its `PASS_RECORDED_CHECKS` does not itself imply latency or quality acceptance; inspect those fields separately.
 
-```bash
-build/test_ewc    # codec: transforms, lossless, near-lossless bound, LOCO damage, CBR,
-                  # closed loop, threads, metadata, corruption, reference tracking,
-                  # input range, >64 KiB groups
-build/test_net    # transport: all FEC modes, losses, duplicates, reordering, malformed and
-                  # truncated datagrams, end-to-end "never reliable-but-wrong"
-ctest --test-dir build
-```
-
-## Tools
-
-| Tool | Purpose |
+| Interface / tool | Reference |
 |---|---|
-| `ewc_enc` | raw `uint16` LE file → `.ewc` stream (`--lossless`, `--gop`, `--kbps`, `--bd`, ...) |
-| `ewc_dec` | `.ewc` stream → raw file; optional per-frame report against a reference |
-| `ewc_bench` | encode → packetise → simulated UDP channel → reassemble → decode; prints a `SUMMARY` line |
-| `ewc_corrupt` | introduce losses into a stored bitstream: bit errors, deleted or zero-filled packets, bursts |
-| `loco_probe` | LOCO-I diagnostics |
+| Encoder / decoder API | [include/ewc.h](include/ewc.h) |
+| Packetizer / reassembler API | [include/ewc_net.h](include/ewc_net.h) |
+| Bitstream and metadata | [docs/FORMAT.md](docs/FORMAT.md) |
+| Network protocol / FEC | [docs/NETWORK.md](docs/NETWORK.md) |
+| CLI and experiments | [tools/](tools/), [scripts/](scripts/), [eval/](eval/) |
 
-Input files are raw little-endian `uint16`, row-major, 2 bytes per pixel, no header.
-Samples above `2^bd − 1` are rejected by the library. `ewc_enc` refuses them in lossless
-mode and clips them (with a count) in lossy mode.
+Optional GStreamer experiments use external libraries and are not evidence of the self-contained configuration. Current source/dependency and offline compliance still require the designated acceptance audit.
 
-### ewc_bench examples
+## Repository policy
 
-```bash
-# 2 Mbps codec rate, I/P with GOP 30, 2 threads
-ewc_bench --in seq.u16 --w 640 --h 512 --kbps 2000 --gop 30 --threads 2 -q
+Keep source, manifests, curated metrics and reports in Git. Keep downloaded datasets, reconstructed videos, build outputs and transient runs outside ordinary Git tracking. Existing large historical objects remain documented; this cleanup does not rewrite Git history.
 
-# 2 Mbps total on the wire (headers + FEC included), 5% loss, mean burst 2,
-# Reed-Solomon FEC with one parity per 4 data datagrams, intra refresh on feedback
-ewc_bench --in seq.u16 --w 640 --h 512 --link-kbps 2000 --gop 30 \
-  --udp-loss 0.05 --burst 2 --fec 4 --fec-mode rs --feedback 2 -q
-
-# lossless, verify bit-exactness (SUMMARY: exact 1)
-ewc_bench --in seq.u16 --w 640 --h 512 --lossless --threads 2 -q
-```
-
-The `SUMMARY` line reports codec, FEC, header and wire kbps separately; frame classes
-`ok / damaged / ref_invalid / lost`; PSNR (14-bit peak), RMSE, MAE, max error; latency
-percentiles; datagram loss and FEC recovery. `--csv` writes per-frame rows.
-
-## Library API
-
-See `include/ewc.h` (codec) and `include/ewc_net.h` (transport).
-
-- `Encoder::encode()` appends one self-contained frame unit.
-- `Encoder::request_intra()` forces the next frame to be an I frame (use on receiver feedback).
-- `Decoder::decode_next()` decodes the next unit. Damaged data is concealed.
-  `FrameInfo::reliable()` is true only for frames decoded from complete, CRC-verified data
-  whose reference chain (for P frames) is also intact.
-- `Packetizer` / `Reassembler` cut units into datagrams with optional FEC and put them back.
-
-## Documentation
-
-- `docs/POC_REPORT.md` — the RCI proof-of-concept, answered section by section.
-- `docs/FORMAT.md` — frame unit (bitstream) format, including the LOCO profile.
-- `docs/NETWORK.md` — UDP datagram protocol, FEC modes and their limits.
-- `docs/EVALUATION.md` — measured results, method and known limitations.
-- `docs/SESSION_REPORT.md` — what changed in the 2026-11-04/05 session, why, how it was tested.
-- `eval/` — scripts and raw results (`scripts/`, `results/`), head-to-head harness against
-  the original bitrate-main (`h2h/`), FLIR ADAS v2 preparation (`flir_prep/`).
+**Branches:** `video-test` is the proposed active development line; `main` remains the published baseline until reviewed promotion. This cleanup is prepared on `cleanup/reconcile-2026-11-11`. No other branch is deleted, merged, hidden or force-pushed. See the [branch audit](docs/BRANCHES.md).
